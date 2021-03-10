@@ -85,10 +85,10 @@ namespace GetReBackMoneyOrderRecordTool
             var resultdt = tempdt.MakeRebateRecordTemp().Clone();
 
             var param = new Dictionary<string, string>();
-            param.Add("pageindex","1");
-            param.Add("pagesize","10");
-            param.Add("startdate","2021-02-10");
-            param.Add("enddate","2021-03-10");
+            param.Add("pageindex","1");           //页码
+            param.Add("pagesize","50");           //一页显示条数
+            param.Add("startdate","2019-02-10");  //开始时间
+            param.Add("enddate","2021-03-10");    //结束时间
             var result = UWeb.Get("/rs/Rebates/getRebateRecordsByDate", param);
 
             resultdt.Merge(GetXmlList(result));
