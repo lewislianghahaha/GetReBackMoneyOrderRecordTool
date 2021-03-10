@@ -104,9 +104,7 @@ namespace GetReBackMoneyOrderRecordTool
         private DataTable GetXmlList(string xmlstring)
         {
             var dt = tempdt.MakeRebateRecordTemp().Clone();
-
-            //ArrayList arrayList=new ArrayList();
-
+            //创建xmlDocment对像并读取传输过来的xml字符串
             var xmldoc = new XmlDocument();
             xmldoc.LoadXml(xmlstring);
             
@@ -130,7 +128,7 @@ namespace GetReBackMoneyOrderRecordTool
                                     if (p2.Name == "item")
                                     {
                                         var pp = p2.ChildNodes;
-
+                                        //根据对应的字段名称,获取其对应的节点值至DT.newrow内
                                         var newrow = dt.NewRow();
                                         for (var i = 0; i < dt.Columns.Count; i++)
                                         {
