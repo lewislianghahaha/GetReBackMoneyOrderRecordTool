@@ -67,12 +67,7 @@ namespace GetReBackMoneyOrderRecordTool
                    // var a = result;
                 }
                 //当完成后将相关记录导出至EXCEL
-                var saveFileDialog = new SaveFileDialog { Filter = $"Xlsx文件|*.xlsx" };
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    var fileAdd = saveFileDialog.FileName;
-                    exportDt.ExportDtToExcel(fileAdd, resultdt);
-                }
+                ExportExcel(resultdt);
             }
             catch (Exception ex)
             {
@@ -87,61 +82,78 @@ namespace GetReBackMoneyOrderRecordTool
         /// <returns></returns>
         public void GeteUseTimeRebateNoList()
         {
+            var resultdt = tempdt.MakeRebateRecordTemp().Clone();
+
             var param = new Dictionary<string, string>();
             param.Add("pageindex","1");
             param.Add("pagesize","10");
             param.Add("startdate","2021-02-10");
             param.Add("enddate","2021-03-10");
             var result = UWeb.Get("/rs/Rebates/getRebateRecordsByDate", param);
-            GetXmlList(result);
+
+            resultdt.Merge(GetXmlList(result));
+
+            //当完成后将相关记录导出至EXCEL
+            ExportExcel(resultdt);
         }
 
         /// <summary>
         /// 循环获取XML子节点内的指定节点信息
         /// </summary>
         /// <param name="xmlstring"></param>
-        private void GetXmlList(string xmlstring)
+        private DataTable GetXmlList(string xmlstring)
         {
-            ArrayList arrayList=new ArrayList();
+            var dt = tempdt.MakeRebateRecordTemp().Clone();
+
+            //ArrayList arrayList=new ArrayList();
 
             var xmldoc = new XmlDocument();
             xmldoc.LoadXml(xmlstring);
             
             //循环层级获取XML节点记录
-            XmlNode xmlNode = xmldoc.DocumentElement;
+            var xmlNode = xmldoc.DocumentElement;
             if (xmlNode != null)
                 foreach (XmlNode node in xmlNode)
                 {
                     if (node.Name == "data")
                     {
-                        XmlNodeList xmlNode1 = node.ChildNodes;
+                        var xmlNode1 = node.ChildNodes;
 
                         foreach (XmlNode node1 in xmlNode1)
                         {
                             if (node1.Name == "rebateRecords")
                             {
-                                XmlNodeList pXmlNodeList = node1.ChildNodes;
+                                var pXmlNodeList = node1.ChildNodes;
                                  
                                 foreach (XmlNode p2 in pXmlNodeList)
                                 {
                                     if (p2.Name == "item")
                                     {
-                                        XmlNodeList pp = p2.ChildNodes;
+                                        var pp = p2.ChildNodes;
 
-                                        foreach (XmlNode p3 in pp)
+                                        var newrow = dt.NewRow();
+                                        for (var i = 0; i < dt.Columns.Count; i++)
                                         {
-                                            if (p3.Name=="cRebateNo")
+                                            foreach (XmlNode p3 in pp)
                                             {
-                                                arrayList.Add(p3.InnerText);
-                                            }   
+                                                if (p3.Name != "cOrderNo" && p3.Name != "cRebateNo" && p3.Name != "fOrderRebateMoney" &&
+                                                    p3.Name != "cRecordStatus" && p3.Name != "cRecordStatusName" && p3.Name != "dCreateDate" &&
+                                                    p3.Name != "iSubmiterId") continue;
+
+                                                if (p3.Name == dt.Columns[i].ColumnName)
+                                                {
+                                                    newrow[i] = p3.InnerText;
+                                                }
+                                            }
                                         }
+                                        dt.Rows.Add(newrow);
                                     }
                                 }
                             }
                         }
                     }
                 }
-            var a = arrayList;
+            return dt;
         }
 
         /// <summary>
@@ -218,6 +230,21 @@ namespace GetReBackMoneyOrderRecordTool
             newrow[1] = order;
             dt.Rows.Add(newrow);
             return dt;
+        }
+
+        /// <summary>
+        /// 导出EXCEL
+        /// </summary>
+        /// <param name="resultdt"></param>
+        private void ExportExcel(DataTable resultdt)
+        {
+            //当完成后将相关记录导出至EXCEL
+            var saveFileDialog = new SaveFileDialog { Filter = $"Xlsx文件|*.xlsx" };
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var fileAdd = saveFileDialog.FileName;
+                exportDt.ExportDtToExcel(fileAdd, resultdt);
+            }
         }
     }
 }
