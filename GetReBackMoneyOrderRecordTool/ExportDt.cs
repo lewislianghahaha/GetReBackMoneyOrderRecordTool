@@ -84,7 +84,7 @@ namespace GetReBackMoneyOrderRecordTool
                             if (Convert.ToString(sourcedt.Rows[j][k]) == "") continue;
                             else
                             {
-                                    row.CreateCell(k, CellType.String).SetCellValue(Convert.ToString(sourcedt.Rows[j][k]));
+                                row.CreateCell(k, CellType.String).SetCellValue(Convert.ToString(sourcedt.Rows[j][k]));
                             }
                         }
                         rownum++;
