@@ -101,6 +101,15 @@ namespace GetReBackMoneyOrderRecordTool
             ExportExcel(resultdt);
         }
 
+        public void GetOrderMessage(string orderno)
+        {
+            var param = new Dictionary<string, string>();
+            param.Remove("orderno");
+            param.Add("orderno",orderno);
+            var result = UWeb.Get("/rs/Orders/getOrder",param);
+            
+        }
+
         /// <summary>
         /// 循环获取XML子节点内的指定节点信息
         /// </summary>

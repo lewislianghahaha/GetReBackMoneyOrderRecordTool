@@ -400,7 +400,8 @@ UF-23d6e6d1415a2002140001,	UF-23d6e5d141732002140001,	UF-23d6deb150a42002140001,
                 //result = UdhPosts.GetOrderList("UF-232c768161622003180001");
                 //result = UdhPosts.GetAllOrder();
                 //result = udh.GetUseOrderList(uorderlist);//"UF-23d6e16171162103050001"  "UF-23d6e0d1716e2102010001,"  uorderlist  "UF-24fe3ee1401a2102010001"
-                udh.GeteUseTimeRebateNoList();
+                //udh.GeteUseTimeRebateNoList();
+                udh.GetOrderMessage("UO-4da68d0190392104110001");
             }
             catch (Exception ex)
             {
