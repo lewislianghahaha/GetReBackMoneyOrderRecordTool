@@ -61,5 +61,29 @@ namespace GetReBackMoneyOrderRecordTool
             }
             return dt;
         }
+
+        /// <summary>
+        /// 导入EXCEL临时表
+        /// </summary>
+        /// <returns></returns>
+        public DataTable MakeImportTemp()
+        {
+            var dt = new DataTable();
+            for (var i = 0; i < 1; i++)
+            {
+                var dc = new DataColumn();
+                switch (i)
+                {
+                    //U订货返利单号
+                    case 0:
+                        dc.ColumnName = "cRebateNo";
+                        dc.DataType = Type.GetType("System.String");
+                        break;
+                }
+                dt.Columns.Add(dc);
+            }
+            return dt;
+        }
+
     }
 }

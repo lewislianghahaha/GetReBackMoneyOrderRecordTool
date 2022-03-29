@@ -90,9 +90,9 @@ namespace GetReBackMoneyOrderRecordTool
             param.Remove("pagesize");
             param.Add("pagesize","50");           //一页显示条数
             param.Remove("startdate");
-            param.Add("startdate","2019-02-10");  //开始时间
+            param.Add("startdate","2021-01-01");  //开始时间
             param.Remove("enddate");
-            param.Add("enddate","2021-03-10");    //结束时间
+            param.Add("enddate","2021-01-31");    //结束时间
             var result = UWeb.Get("/rs/Rebates/getRebateRecordsByDate", param);
 
             resultdt.Merge(GetXmlList(result));
@@ -111,7 +111,7 @@ namespace GetReBackMoneyOrderRecordTool
         }
 
         /// <summary>
-        /// 循环获取XML子节点内的指定节点信息
+        /// 循环获取XML子节点内的指定节点信息-根据时间获取返利单使用记录
         /// </summary>
         /// <param name="xmlstring"></param>
         private DataTable GetXmlList(string xmlstring)
@@ -168,7 +168,7 @@ namespace GetReBackMoneyOrderRecordTool
         }
 
         /// <summary>
-        /// 获取XML记录并生成DT
+        /// 获取XML记录并生成DT-根据返利单获取返利使用记录
         /// </summary>
         /// <returns></returns>
         private DataTable GetXmLtoDb(string xmlstring)
